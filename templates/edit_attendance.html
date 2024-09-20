@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Attendance</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Student Attendance Tracker</h1>
+    </header>
+    <div class="container">
+        <h2>Edit Attendance</h2>
+        <form action="{{ url_for('edit_attendance', id=attendance.id) }}" method="post">
+            <input type="date" name="date" value="{{ attendance.date }}" required>
+            <select name="status" required>
+                <option value="Present" {% if attendance.status == 'Present' %}selected{% endif %}>Present</option>
+                <option value="Absent" {% if attendance.status == 'Absent' %}selected{% endif %}>Absent</option>
+            </select>
+            <select name="student_id" required>
+                {% for student in students %}
+                    <option value="{{ student.id }}" {% if student.id == attendance.student_id %}selected{% endif %}>{{ student.name }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Update Attendance</button>
+        </form>
+        <a href="{{ url_for('attendance_list') }}">Back to Attendance List</a>
+    </div>
+</body>
+</html>

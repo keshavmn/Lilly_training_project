@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Attendance Management</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Student Attendance Tracker</h1>
+    </header>
+    <div class="container">
+        <h2>Attendance</h2>
+        
+        {% if error %}
+            <div class="alert alert-danger">
+                {{ error }}
+            </div>
+        {% endif %}
+        
+        <form action="{{ url_for('add_attendance') }}" method="post">
+            <input type="date" name="date" required>
+            <select name="status" required>
+                <option value="Present">Present</option>
+                <option value="Absent">Absent</option>
+            </select>
+            <select name="student_id" required>
+                {% for student in students %}
+                    <option value="{{ student.id }}">{{ student.name }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Add Attendance</button>
+        </form>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Student</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in attendance %}
+                    <tr>
+                        <td>{{ record.date }}</td>
+                        <td>{{ record.status }}</td>
+                        <td>{{ record.student_name }}</td>
+                        <td>
+                            <a href="{{ url_for('edit_attendance', id=record.id) }}">Edit</a>
+                            <a href="{{ url_for('delete_attendance', id=record.id) }}">Delete</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="{{ url_for('students_list') }}">Manage Students</a>
+    </div>
+</body>
+</html>
